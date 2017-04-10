@@ -13,6 +13,9 @@ find_package(Qt5 COMPONENTS Gui REQUIRED)
 
 # EDIT: add your (non-test) source files to this list
 set(src
+  parse.hpp parse.cpp
+  rayvect.hpp rayvect.cpp
+  sceneobjects.hpp sceneobjects.cpp
   
   )
 
