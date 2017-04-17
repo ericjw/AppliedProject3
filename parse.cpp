@@ -13,7 +13,7 @@ JSONParse::JSONParse(std::string fname) {
 	}
 
 	jdoc = QJsonDocument().fromJson(infile.readAll());
-
-	QString strJson(jdoc.toJson(QJsonDocument::Compact));
-	qDebug() << strJson;
+	//QString strJson(jdoc.toJson(QJsonDocument::Indented));
+	//qDebug() << strJson;
+	//printf("%s",strJson.toStdString().c_str());
 }

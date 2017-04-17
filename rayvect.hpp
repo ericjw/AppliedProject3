@@ -10,4 +10,8 @@ private:
 
 };
 
-#endif // !1
+//find dot product
+double dot(RayVect a, RayVect b);
+RayVect norm(RayVect arg);
+
+#endif 
