@@ -9,7 +9,7 @@ JSONParse::JSONParse(std::string fname) {
 	//handle bad file error
 	if (!infile.open(QFile::ReadOnly )) {
 		//infile.close();
-		throw std::invalid_argument("Bad JSON file name");
+		throw std::invalid_argument("Error: Bad JSON file name");
 	}
 
 	jdoc = QJsonDocument().fromJson(infile.readAll());
