@@ -7,9 +7,9 @@
 
 class JSONParse {
 public:
-	JSONParse(std::ifstream in);
+	JSONParse(std::string fname);
 private:
 	QJsonDocument jdoc;
-}
+};
 
 #endif // !_PARSE_H
