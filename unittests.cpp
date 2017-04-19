@@ -4,6 +4,7 @@
 
 #include "parse.hpp"
 #include "rayvect.hpp"
+#include "sceneobjects.hpp"
 
 // IMPORTANT NOTE:
 // These are just a few examples from my solution and **should be removed**.
@@ -67,4 +68,8 @@ TEST_CASE("tests vector creation and operations", "[rayvect]") {
 
 TEST_CASE("Test JSON Parsing", "[JSON]") {
 	JSONParse x("/vagrant/tests/scene0.json");
+}
+
+TEST_CASE("Test creation of sphere, plane, camera", "[sceneobjects]") {
+
 }
