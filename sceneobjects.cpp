@@ -1,6 +1,6 @@
 #include "sceneobjects.hpp"
 
-Camera::Camera(Center cent, double foc, Normal norm, int res[], double siz[])
+Camera::Camera(Center cent, double foc, Normal norm, double res[], int siz[])
 {
 	center = cent;
 	focus = foc;

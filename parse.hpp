@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <QJsonDocument>
+#include "sceneobjects.hpp"
 
 class JSONParse {
 public:
@@ -11,8 +12,16 @@ public:
 	//and store values in the scene
 	JSONParse(std::string fname);
 
+	void parse();
+
+
 private:
 	QJsonDocument jdoc;
+	std::vector<Sphere> spheres;
+	std::vector<Light> lights;
+	std::vector<Plane> planes;
+	//Camera cam;
+
 };
 
 #endif // !_PARSE_H

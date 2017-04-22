@@ -70,7 +70,8 @@ TEST_CASE("tests vector creation and operations", "[rayvect]") {
 }
 
 TEST_CASE("Test JSON Parsing", "[JSON]") {
-	JSONParse x("/vagrant/tests/scene0.json");
+	JSONParse x("/vagrant/tests/scene2.json");
+	x.parse();
 }
 
 TEST_CASE("Test creation of sphere and plane", "[sceneobjects]") {
@@ -109,8 +110,8 @@ TEST_CASE("Test creation of sphere and plane", "[sceneobjects]") {
 
 TEST_CASE("Test creation of light and camera", "[sceneobjects]") {
 	//camera
-	int a[] = { 256, 256 };
-	double b[] = {1000., 500.};
+	double a[] = { 256., 256. };
+	int b[] = {1000, 500};
 	Camera cam(Camera::Center{ 3., 2., 1. }, 7.7, Camera::Normal{ 0., 0., 1. }, a, b);
 	
 	REQUIRE(cam.center.x == 3.);
@@ -123,11 +124,11 @@ TEST_CASE("Test creation of light and camera", "[sceneobjects]") {
 
 	REQUIRE(cam.focus == 7.7);
 
-	REQUIRE(cam.resolution[0] == 256);
-	REQUIRE(cam.resolution[1] == 256);
+	REQUIRE(cam.resolution[0] == 256.);
+	REQUIRE(cam.resolution[1] == 256.);
 
-	REQUIRE(cam.size[0] == 1000.);
-	REQUIRE(cam.size[1] == 500.);
+	REQUIRE(cam.size[0] == 1000);
+	REQUIRE(cam.size[1] == 500);
 
 	//light
 	Light li(Light::Location{33., 44, 55.}, 9000.1);
