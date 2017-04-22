@@ -54,9 +54,9 @@ void JSONParse::parse() {
 
 	QJsonArray lightsinscene = obj["lights"].toArray();
 	for (auto l : lightsinscene) {
-		QJsonObject tmp = l.toObject();
-		QJsonObject loc = tmp["location"].toObject();
-		lights.push_back(Light(Light::Location{loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble()}, tmp["intensity"].toDouble()));
+		QJsonObject curr = l.toObject();
+		QJsonObject loc = curr["location"].toObject();
+		lights.push_back(Light(Light::Location{loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble()}, curr["intensity"].toDouble()));
 	}
 
 	/*for (auto l : lights) {
@@ -66,4 +66,57 @@ void JSONParse::parse() {
 		qDebug() << l.location.y;
 		qDebug() << l.location.z;
 	}*/
+
+	QJsonArray objectsinscene = obj["objects"].toArray();
+	for (auto o : objectsinscene) {
+		QJsonObject curr = o.toObject();
+		if (curr["type"].toString() == "sphere") {
+			QJsonObject loc = curr["center"].toObject();
+			QJsonObject col = curr["color"].toObject();
+			spheres.push_back(Sphere(Sphere::Center{ loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble() }, 
+				Sphere::Color{ col["r"].toDouble(), col["g"].toDouble(), col["b"].toDouble() },
+				curr["lambert"].toDouble(), curr["radius"].toDouble()));
+		}
+		else if (curr["type"].toString() == "plane") {
+			QJsonObject norm = curr["normal"].toObject();
+			QJsonObject loc = curr["center"].toObject();
+			QJsonObject col = curr["color"].toObject();
+			planes.push_back(Plane(Plane::Center{ loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble() }, 
+				Plane::Normal{norm["x"].toDouble(), norm["y"].toDouble(), norm["z"].toDouble()}, 
+				Plane::Color{ col["r"].toDouble(), col["g"].toDouble(), col["b"].toDouble() }, 
+				curr["lambert"].toDouble()));
+		}
+	}
+
+	qDebug() << "Spheres";
+	for (auto s : spheres) {
+		qDebug() << s.center.x;
+		qDebug() << s.center.y;
+		qDebug() << s.center.z;
+
+		qDebug() << s.color.r;
+		qDebug() << s.color.g;
+		qDebug() << s.color.b;
+
+		qDebug() << s.lambert;
+
+		qDebug() << s.radius;
+	}
+
+	qDebug() << "Planes";
+	for (auto p : planes) {
+		qDebug() << p.center.x;
+		qDebug() << p.center.y;
+		qDebug() << p.center.z;
+
+		qDebug() << p.color.r;
+		qDebug() << p.color.g;
+		qDebug() << p.color.b;
+
+		qDebug() << p.lambert;
+
+		qDebug() << p.normal.x;
+		qDebug() << p.normal.y;
+		qDebug() << p.normal.z;
+	}
 }
