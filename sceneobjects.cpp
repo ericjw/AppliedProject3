@@ -1,4 +1,5 @@
 #include "sceneobjects.hpp"
+#include <cmath>
 
 Camera::Camera(Center cent, double foc, Normal norm, double res[], int siz[])
 {
@@ -42,7 +43,7 @@ Plane::Plane(Center cent, Normal norm, Color col, double lamb)
 
 double Plane::getIntersection(Ray r)
 {
-	Vect ray_dir = r.direction;
+	Vect ray_dir = norm(r.direction);
 	double a = dot(ray_dir, Vect(normal.x, normal.y, normal.z));
 
 	if (a == 0) {
@@ -50,8 +51,7 @@ double Plane::getIntersection(Ray r)
 		return -1;
 	}
 	else {
-		//change
-		double b = dot(ray_dir, Vect(normal.x, normal.y, normal.z));
+		
 	}
 
 	return 0.0;

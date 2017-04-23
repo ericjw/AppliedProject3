@@ -13,30 +13,6 @@ Vect::Vect() {
 	z = 0;
 }
 
-//Vect & Vect::operator+(const Vect & v)
-//{
-//	//Vect tmp(this->x + v.x, this->y + v.y, this->z + v.z);
-//	//return tmp;
-//
-//	this->x += v.x;
-//	this->y += v.y;
-//	this->z += v.z;
-//
-//	return *this;
-//}
-
-//Vect & Vect::operator*(const double& d)
-//{
-//	//Vect tmp(this->x * d, this->y * d, this->z * d);
-//	//return tmp;
-//
-//	this->x *= d;
-//	this->y *= d;
-//	this->z *= d;
-//
-//	return *this;
-//}
-
 //find dot product
 double dot(Vect a, Vect b) {
 	return (a.x*b.x + a.y*b.y + a.z*b.z);

@@ -20,12 +20,20 @@ inline Vect operator+(Vect lhs, const Vect& rhs)
 
 inline Vect operator*(Vect lhs, const double& rhs)
 {
-	//Vect tmp(this->x * d, this->y * d, this->z * d);
-	//return tmp;
 
 	lhs.x *= rhs;
 	lhs.y *= rhs;
 	lhs.z *= rhs;
+
+	return lhs;
+}
+
+inline Vect operator-(Vect lhs, const Vect& rhs)
+{
+
+	lhs.x -= rhs.x;
+	lhs.y -= rhs.y;
+	lhs.z -= rhs.z;
 
 	return lhs;
 }
