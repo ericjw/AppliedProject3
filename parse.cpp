@@ -17,6 +17,10 @@ JSONParse::JSONParse(std::string fname) {
 	jdoc = QJsonDocument().fromJson(infile.readAll());
 }
 
+JSONParse::JSONParse() {
+
+}
+
 void JSONParse::parse() {
 	QJsonObject obj = jdoc.object();
 	QJsonObject camer = obj["camera"].toObject();

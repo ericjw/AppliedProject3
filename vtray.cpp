@@ -3,19 +3,24 @@
 #include <fstream>
 
 #include "parse.hpp"
+#include "render.hpp"
 
 int main(int argc, char * argv[]) {
 	if (argc == 3) {
 
-		//opens file
-		std::string jsonfname(argv[1]);
+		JSONParse x;
+		//open file
+		std::string jsonfname(argv[3]);
 		try {
-			JSONParse x(jsonfname);
+			x = JSONParse(jsonfname);
+			x.parse();
 		}
-		catch (std::exception& err) {
+		catch (std::exception err) {
 			std::cerr << err.what() << std::endl;
 			return EXIT_FAILURE;
 		}
+
+		RayTracer tr = RayTracer(x.getLights(), x.getSpheres(), x.getPlanes(), x.getCam());
 
 		//output file name
 		std::string outfname(argv[2]);
@@ -33,15 +38,19 @@ int main(int argc, char * argv[]) {
 
 		std::cout << "# threads " << threads << std::endl;
 
-		//opens file
+		JSONParse x;
+		//open file
 		std::string jsonfname(argv[3]);
 		try {
-			JSONParse x(jsonfname);
+			x = JSONParse(jsonfname);
+			x.parse();
 		}
-		catch (std::exception& err) {
+		catch (std::exception err) {
 			std::cerr << err.what() << std::endl;
 			return EXIT_FAILURE;
 		}
+		
+		RayTracer tr = RayTracer(x.getLights(), x.getSpheres(), x.getPlanes(), x.getCam());
 
 		//output file name
 		std::string outfname(argv[4]);

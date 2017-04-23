@@ -1,5 +1,6 @@
 #ifndef  _SCENE_OBJECTS_H
 #define _SCENE_OBJECTS_H
+#include "rayvect.hpp"
 
 class Camera {
 public:
@@ -28,9 +29,11 @@ public:
 	struct Color {
 		double r, g, b;
 	} color;
-
 	double lambert;
+	
 	Sphere(Center cent, Color col, double lamb, double rad);
+
+	double getIntersection(Ray r);
 };
 
 class Plane {
@@ -50,6 +53,8 @@ public:
 	double lambert;
 
 	Plane(Center cent, Normal norm, Color col, double lamb);
+	
+	double getIntersection(Ray r);
 };
 
 class Light {

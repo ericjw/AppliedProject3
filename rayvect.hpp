@@ -1,17 +1,44 @@
 #ifndef _RAYVECT_H
 #define _RAYVECT_H
 
-class RayVect {
+class Vect {
 public:
-	RayVect(double x_in, double y_in, double z_in);
+	Vect(double x_in, double y_in, double z_in);
+	Vect();
 
 	double x, y, z;
-private:
-
 };
 
+inline Vect operator+(Vect lhs, const Vect& rhs)
+{
+	lhs.x += rhs.x;
+	lhs.y += rhs.y;
+	lhs.z += rhs.z;
+
+	return lhs;
+}
+
+inline Vect operator*(Vect lhs, const double& rhs)
+{
+	//Vect tmp(this->x * d, this->y * d, this->z * d);
+	//return tmp;
+
+	lhs.x *= rhs;
+	lhs.y *= rhs;
+	lhs.z *= rhs;
+
+	return lhs;
+}
+
 //find dot product
-double dot(RayVect a, RayVect b);
-RayVect norm(RayVect arg);
+double dot(Vect a, Vect b);
+Vect norm(Vect arg);
+
+class Ray {
+public:
+	Ray(Vect ori, Vect dir);
+
+	Vect origin, direction;
+};
 
 #endif 

@@ -16,7 +16,7 @@ std::string testFilePath = "/vagrant/tests/scene2.json";
 #include <QDebug>
 
 TEST_CASE("tests vector creation and operations", "[rayvect]") {
-	RayVect a(3, 2, 1), b(10, 9, 8), c(5, 0, 0);
+	Vect a(3, 2, 1), b(10, 9, 8), c(5, 0, 0);
 	REQUIRE(a.x == Approx(3));
 	REQUIRE(a.y == Approx(2));
 	REQUIRE(a.z == Approx(1));
@@ -34,16 +34,40 @@ TEST_CASE("tests vector creation and operations", "[rayvect]") {
 	REQUIRE(dot(b, c) == Approx(50));
 
 	//unit normal
-	RayVect anorm = norm(a);
+	Vect anorm = norm(a);
 	REQUIRE(anorm.x == Approx(3/sqrt(14)));
 	REQUIRE(anorm.y == Approx(sqrt(2./7)));
 	REQUIRE(anorm.z == Approx(1 / sqrt(14)));
 
 	//dot product
-	RayVect bnorm = norm(b);
+	Vect bnorm = norm(b);
 	REQUIRE(bnorm.x == Approx(2*sqrt(5)/7));
 	REQUIRE(bnorm.y == Approx(9/(7*sqrt(5))));
 	REQUIRE(bnorm.z == Approx(8 / (7 * sqrt(5))));
+
+	//overloaded operators
+	Vect mult = a * -3;
+	REQUIRE(mult.x == -9);
+	REQUIRE(mult.y == -6);
+	REQUIRE(mult.z == -3);
+
+	Vect test = b + a;
+	REQUIRE(test.x == 13);
+	REQUIRE(test.y == 11);
+	REQUIRE(test.z == 9);
+
+}
+
+TEST_CASE("test ray creation", "[ray]") {
+	Vect o(0, 0, 0), d(1,2,3);
+	Ray r(o, d);
+	REQUIRE(r.direction.x == 1);
+	REQUIRE(r.direction.y == 2);
+	REQUIRE(r.direction.z == 3);
+
+	REQUIRE(r.origin.x == 0);
+	REQUIRE(r.origin.y == 0);
+	REQUIRE(r.origin.z == 0);
 }
 
 TEST_CASE("Test creation of sphere and plane", "[sceneobjects]") {
@@ -169,6 +193,16 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE(s1.color.b == 100);
 	REQUIRE(s1.lambert == 1);
 	REQUIRE(s1.radius == 2);
+}
+
+TEST_CASE("test intersections", "[render]") {
+	Plane p1(Plane::Center{ 1.2, 2.3, 4.5 }, Plane::Normal{ 0., 0., 1. },
+		Plane::Color{ 255., 128.9, 0. }, 1.);
+	Sphere s1(Sphere::Center{ 1.2, 2.3, 4.5 }, Sphere::Color{ 123., 10., 17. }, 1., 3.14);
+
+	Ray r(Vect(0,-10, 0), Vect(0, 1, 0));
+	//REQUIRE(s1.getIntersection(r) == 0);
+
 }
 
 TEST_CASE("test rendering class", "[render]") {

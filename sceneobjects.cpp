@@ -23,12 +23,38 @@ Sphere::Sphere(Center cent, Color col, double lamb, double rad)
 	radius = rad;
 }
 
+double Sphere::getIntersection(Ray r)
+{
+	Vect asdf = r.origin;
+	Vect dir = r.direction;
+
+
+	return 0.0;
+}
+
 Plane::Plane(Center cent, Normal norm, Color col, double lamb)
 {
 	center = cent;
 	normal = norm;
 	color = col;
 	lambert = lamb;
+}
+
+double Plane::getIntersection(Ray r)
+{
+	Vect ray_dir = r.direction;
+	double a = dot(ray_dir, Vect(normal.x, normal.y, normal.z));
+
+	if (a == 0) {
+		//ray parallel
+		return -1;
+	}
+	else {
+		//change
+		double b = dot(ray_dir, Vect(normal.x, normal.y, normal.z));
+	}
+
+	return 0.0;
 }
 
 Light::Light(Location loc, double inten)

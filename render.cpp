@@ -7,3 +7,6 @@ RayTracer::RayTracer(std::vector<Light> li, std::vector<Sphere> sph, std::vector
 	planes = pla;
 	cam = ca;
 }
+
+
+//https://www.youtube.com/watch?v=4apLfBb9rbE 28:00
