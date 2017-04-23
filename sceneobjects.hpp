@@ -33,7 +33,7 @@ public:
 	
 	Sphere(Center cent, Color col, double lamb, double rad);
 
-	double getIntersection(Ray r);
+	double getIntersection(const Ray &r);
 };
 
 class Plane {
@@ -54,7 +54,7 @@ public:
 
 	Plane(Center cent, Normal norm, Color col, double lamb);
 	
-	double getIntersection(Ray r);
+	double getIntersection(const Ray &r);
 };
 
 class Light {
