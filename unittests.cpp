@@ -2,6 +2,7 @@
 #define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 
+//handle testing on windows/unix
 #ifdef _WIN32
 std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json";
 #else
@@ -11,6 +12,7 @@ std::string testFilePath = "/vagrant/tests/scene2.json";
 #include "parse.hpp"
 #include "rayvect.hpp"
 #include "sceneobjects.hpp"
+#include "render.hpp"
 #include <QDebug>
 
 TEST_CASE("tests vector creation and operations", "[rayvect]") {
@@ -167,4 +169,10 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE(s1.color.b == 100);
 	REQUIRE(s1.lambert == 1);
 	REQUIRE(s1.radius == 2);
+}
+
+TEST_CASE("test rendering class", "[render]") {
+	JSONParse a(testFilePath);
+	a.parse();
+	RayTracer tracer = RayTracer(a.getLights(), a.getSpheres(), a.getPlanes(), a.getCam());
 }

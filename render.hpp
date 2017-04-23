@@ -7,6 +7,7 @@
 class RayTracer {
 public:
 	RayTracer(std::vector<Light> li, std::vector<Sphere> sph, std::vector<Plane> pla, Camera ca);
+
 private:
 	std::vector<Light> lights;
 	std::vector<Sphere> spheres;
