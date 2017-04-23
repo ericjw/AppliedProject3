@@ -11,10 +11,11 @@ public:
 	struct Normal {
 		double x, y, z;
 	} normal;
-	double* resolution;
-	int* size;
+	double resolution[2];
+	int size[2];
 	
 	Camera(Center cent, double foc, Normal norm, double res[], int siz[]);
+	Camera();
 };
 
 class Sphere {

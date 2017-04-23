@@ -2,9 +2,16 @@
 #define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 
+#ifdef _WIN32
+std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json";
+#else
+std::string testFilePath = "/vagrant/tests/scene2.json";
+#endif
+
 #include "parse.hpp"
 #include "rayvect.hpp"
 #include "sceneobjects.hpp"
+#include <QDebug>
 
 // IMPORTANT NOTE:
 // These are just a few examples from my solution and **should be removed**.
@@ -67,11 +74,6 @@ TEST_CASE("tests vector creation and operations", "[rayvect]") {
 	REQUIRE(bnorm.x == Approx(2*sqrt(5)/7));
 	REQUIRE(bnorm.y == Approx(9/(7*sqrt(5))));
 	REQUIRE(bnorm.z == Approx(8 / (7 * sqrt(5))));
-}
-
-TEST_CASE("Test JSON Parsing", "[JSON]") {
-	JSONParse x("/vagrant/tests/scene2.json");
-	x.parse();
 }
 
 TEST_CASE("Test creation of sphere and plane", "[sceneobjects]") {
@@ -137,4 +139,62 @@ TEST_CASE("Test creation of light and camera", "[sceneobjects]") {
 	REQUIRE(li.location.z == 55.);
 
 	REQUIRE(li.intensity == 9000.1);
+}
+
+TEST_CASE("Test JSON Parsing", "[JSON]") {
+	JSONParse a(testFilePath);
+	a.parse();
+
+	Camera cam = a.getCam();
+	std::vector<Light> lights = a.getLights();
+	std::vector<Plane> planes = a.getPlanes();
+	std::vector<Sphere> spheres = a.getSpheres();
+
+	REQUIRE(lights.size() == 64);
+	REQUIRE(planes.size() == 5);
+	REQUIRE(spheres.size() == 4);
+
+	//camera
+	REQUIRE(cam.center.x == 0);
+	REQUIRE(cam.center.y == 0);
+	REQUIRE(cam.center.z == 0);
+	REQUIRE(cam.focus == 10);
+	REQUIRE(cam.normal.x == 0);
+	REQUIRE(cam.normal.y == 0);
+	REQUIRE(cam.normal.z == 1);
+	REQUIRE(cam.resolution[0] == 0.01);
+	REQUIRE(cam.resolution[1] == 0.01);
+	REQUIRE(cam.size[0] == 1024);
+	REQUIRE(cam.size[1] == 1024);
+
+	//lights
+	Light l1 = lights.at(0);
+	REQUIRE(l1.intensity == 0.6);
+	REQUIRE(l1.location.x == 0);
+	REQUIRE(l1.location.y == 0);
+	REQUIRE(l1.location.z == -10);
+
+	//planes
+	Plane p1 = planes.at(0);
+	REQUIRE(p1.center.x == 0);
+	REQUIRE(p1.center.y == 0);
+	REQUIRE(p1.center.z == 40);
+	REQUIRE(p1.color.r == 100);
+	REQUIRE(p1.color.g == 100);
+	REQUIRE(p1.color.b == 100);
+	REQUIRE(p1.lambert == 1);
+	REQUIRE(p1.normal.x == 0);
+	REQUIRE(p1.normal.y == 0);
+	REQUIRE(p1.normal.z == -1);
+
+	//spheres
+	Sphere s1 = spheres.at(0);
+	REQUIRE(s1.center.x == 2);
+	REQUIRE(s1.center.y == 0);
+	REQUIRE(s1.center.z == 5);
+	REQUIRE(s1.color.r == 200);
+	REQUIRE(s1.color.g == 100);
+	REQUIRE(s1.color.b == 100);
+	REQUIRE(s1.lambert == 1);
+	REQUIRE(s1.radius == 2);
 }

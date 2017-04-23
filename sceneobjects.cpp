@@ -5,8 +5,14 @@ Camera::Camera(Center cent, double foc, Normal norm, double res[], int siz[])
 	center = cent;
 	focus = foc;
 	normal = norm;
-	resolution = res;
-	size = siz;
+	resolution[0] = res[0];
+	resolution[1] = res[1];
+	size[0] = siz[0];
+	size[1] = siz[1];
+}
+
+Camera::Camera() {
+	
 }
 
 Sphere::Sphere(Center cent, Color col, double lamb, double rad)

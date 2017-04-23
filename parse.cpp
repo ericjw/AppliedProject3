@@ -32,7 +32,7 @@ void JSONParse::parse() {
 	double resol[] = { res.at(0).toDouble(), res.at(1).toDouble() };
 	int siz[] = {size.at(0).toInt(), size.at(1).toInt()};
 
-	Camera cam = Camera(Camera::Center{ center["x"].toDouble(), center["y"].toDouble(), center["z"].toDouble() },
+	cam = Camera(Camera::Center{ center["x"].toDouble(), center["y"].toDouble(), center["z"].toDouble() },
 		camer["focus"].toDouble(), Camera::Normal{ norm["x"].toDouble(), norm["y"].toDouble(), norm["z"].toDouble() },
 		resol, siz);
 
@@ -88,35 +88,55 @@ void JSONParse::parse() {
 		}
 	}
 
-	qDebug() << "Spheres";
-	for (auto s : spheres) {
-		qDebug() << s.center.x;
-		qDebug() << s.center.y;
-		qDebug() << s.center.z;
+	//qDebug() << "Spheres";
+	//for (auto s : spheres) {
+	//	qDebug() << s.center.x;
+	//	qDebug() << s.center.y;
+	//	qDebug() << s.center.z;
 
-		qDebug() << s.color.r;
-		qDebug() << s.color.g;
-		qDebug() << s.color.b;
+	//	qDebug() << s.color.r;
+	//	qDebug() << s.color.g;
+	//	qDebug() << s.color.b;
 
-		qDebug() << s.lambert;
+	//	qDebug() << s.lambert;
 
-		qDebug() << s.radius;
-	}
+	//	qDebug() << s.radius;
+	//}
 
-	qDebug() << "Planes";
-	for (auto p : planes) {
-		qDebug() << p.center.x;
-		qDebug() << p.center.y;
-		qDebug() << p.center.z;
+	//qDebug() << "Planes";
+	//for (auto p : planes) {
+	//	qDebug() << p.center.x;
+	//	qDebug() << p.center.y;
+	//	qDebug() << p.center.z;
 
-		qDebug() << p.color.r;
-		qDebug() << p.color.g;
-		qDebug() << p.color.b;
+	//	qDebug() << p.color.r;
+	//	qDebug() << p.color.g;
+	//	qDebug() << p.color.b;
 
-		qDebug() << p.lambert;
+	//	qDebug() << p.lambert;
 
-		qDebug() << p.normal.x;
-		qDebug() << p.normal.y;
-		qDebug() << p.normal.z;
-	}
+	//	qDebug() << p.normal.x;
+	//	qDebug() << p.normal.y;
+	//	qDebug() << p.normal.z;
+	//}
+}
+
+std::vector<Sphere> JSONParse::getSpheres()
+{
+	return spheres;
+}
+
+std::vector<Light> JSONParse::getLights()
+{
+	return lights;
+}
+
+std::vector<Plane> JSONParse::getPlanes()
+{
+	return planes;
+}
+
+Camera JSONParse::getCam()
+{
+	return cam;
 }
