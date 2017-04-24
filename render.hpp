@@ -9,7 +9,6 @@ public:
 	RayTracer(std::vector<Light> li, std::vector<Sphere> sph, std::vector<Plane> pla, Camera ca);
 
 	void render();
-	bool trace();
 
 private:
 	std::vector<Light> lights;

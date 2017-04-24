@@ -21,6 +21,7 @@ int main(int argc, char * argv[]) {
 		}
 
 		RayTracer tr = RayTracer(x.getLights(), x.getSpheres(), x.getPlanes(), x.getCam());
+		tr.render();
 
 		//output file name
 		std::string outfname(argv[2]);

@@ -4,9 +4,9 @@
 
 //handle testing on windows/unix
 #ifdef _WIN32
-std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json";
+std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene0.json";
 #else
-std::string testFilePath = "/vagrant/tests/scene2.json";
+std::string testFilePath = "/vagrant/tests/scene0.json";
 #endif
 
 #include "parse.hpp"
@@ -209,4 +209,5 @@ TEST_CASE("test rendering class", "[render]") {
 	JSONParse a(testFilePath);
 	a.parse();
 	RayTracer tracer = RayTracer(a.getLights(), a.getSpheres(), a.getPlanes(), a.getCam());
+	tracer.render();
 }
