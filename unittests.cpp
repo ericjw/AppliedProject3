@@ -186,12 +186,12 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	//REQUIRE(s1.radius == 2);
 }
 
-TEST_CASE("test intersections", "[render]") {
-	Plane p1(Plane::Center{ 1.2, 2.3, 4.5 }, Plane::Normal{ 0., 0., 1. },
-		Plane::Color{ 255., 128.9, 0. }, 1.);
-	Sphere s1(Sphere::Center{ 1.2, 2.3, 4.5 }, Sphere::Color{ 123., 10., 17. }, 1., 3.14);
-
-}
+//TEST_CASE("test intersections", "[render]") {
+//	Plane p1(Plane::Center{ 1.2, 2.3, 4.5 }, Plane::Normal{ 0., 0., 1. },
+//		Plane::Color{ 255., 128.9, 0. }, 1.);
+//	Sphere s1(Sphere::Center{ 1.2, 2.3, 4.5 }, Sphere::Color{ 123., 10., 17. }, 1., 3.14);
+//
+//}
 
 TEST_CASE("test rendering class", "[render]") {
 	std::vector<std::unique_ptr<Object>> objects;

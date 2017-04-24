@@ -13,6 +13,7 @@ RayTracer::RayTracer(std::vector<Light> li, Camera ca)
 
 void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects) {
 	QImage img(cam.size[1], cam.size[0], QImage::Format_RGB32);
+	//std::vector<std::vector<Vect>> pixels;
 
 	Vect orig = Vect(cam.center.x, cam.center.y, cam.center.z) - (Vect(cam.normal.x, cam.normal.y, cam.normal.z) * cam.focus);
 	for (int x = 0; x < cam.size[1]; x++) {

@@ -69,32 +69,33 @@ Vect Plane::getColor() const
 
 bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const
 {
-	//// assuming vectors are all normalized
-	//Vect n(normal.x, normal.y, normal.z);
-	//double denom = dot( n, dir);
-	//if (denom > 1e-6) {
-	//	Vect p0l0 = norm(Vect(center.x, center.y, center.z)) - orig;
-	//	t = dot(p0l0, n) / denom;
-	//	if (t >= 0) {
-	//		std::cout << "here";
-	//	}
-	//	return (t >= 0);
-	//}
-
-	//return false;
-
-	Vect center(center.x, center.y, center.z);
-	Vect n = norm(Vect(normal.x, normal.y, normal.z));
-	double denom = dot(n, dir);
-	if (denom > .00001) {
-		t = -dot(center - orig, n) / denom;
+	// assuming vectors are all normalized
+	Vect n(normal.x, normal.y, normal.z);
+	double denom = dot( n, dir);
+	if (denom > 1e-6 || denom < -1e-6) {
+		Vect p0l0 = Vect(center.x, center.y, center.z) - orig;
+		t = dot(p0l0, n) / denom;
 		if (t >= 0) {
 			//std::cout << "here";
-			return true;
 		}
+		return (t >= 0);
 	}
 
 	return false;
+
+	
+	//Vect center(center.x, center.y, center.z);
+	//Vect n = Vect(normal.x, normal.y, normal.z);
+	//double denom = dot(n, dir);
+	//if (denom > 1e-6) {
+	//	t = -dot(center - orig, n) / denom;
+	//	if (t >= 0) {
+	//		//std::cout << "here";
+	//		return true;
+	//	}
+	//}
+
+	//return false;
 }
 
 Light::Light(Location loc, double inten)
