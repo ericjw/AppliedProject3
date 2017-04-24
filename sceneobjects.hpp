@@ -8,6 +8,7 @@ public:
 	// virtual intersect function, needs to be overloaded by derived class
 	virtual bool intersect(const Vect &orig, const Vect &dir, double &t) const = 0;
 	virtual Vect getColor() const = 0;
+	virtual Vect getCenter() const = 0;
 	virtual ~Object() {} // virtual destructor 
 	Object() {} // constructor 
 };
@@ -43,7 +44,7 @@ public:
 	
 	Sphere(Center cent, Color col, double lamb, double rad);
 
-
+	Vect getCenter() const;
 	Vect getColor() const;
 
 	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
@@ -67,6 +68,7 @@ public:
 
 	Plane(Center cent, Normal norm, Color col, double lamb);
 
+	Vect getCenter() const;
 	Vect getColor() const;
 	
 	bool intersect(const Vect &orig, const Vect &dir, double &t) const;

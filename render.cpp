@@ -65,6 +65,12 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 	const Object *hitObject = nullptr; 
 	double dist; 
 	if (trace(orig, dir, objects, dist, hitObject)) {
+		Vect point = orig + dir * dist;
+		Vect nhit = norm(point - Vect(hitObject->getCenter()));
+		Vect shadow_ray(Vect(lights.at(0).location.x, lights.at(0).location.y, lights.at(0).location.z));
+		double scale = dot();
+
+		Vect col = hitObject->getColor();
 		return hitObject->getColor();
 	}
 

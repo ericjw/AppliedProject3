@@ -26,6 +26,11 @@ Sphere::Sphere(Center cent, Color col, double lamb, double rad)
 	radius = rad;
 }
 
+Vect Sphere::getCenter() const
+{
+	return Vect(center.x, center.y, center.z);
+}
+
 Vect Sphere::getColor() const
 {
 	return Vect(color.r, color.g, color.b);
@@ -60,6 +65,11 @@ Plane::Plane(Center cent, Normal norm, Color col, double lamb)
 	normal = norm;
 	color = col;
 	lambert = lamb;
+}
+
+Vect Plane::getCenter() const
+{
+	return Vect(center.x, center.y, center.z);
 }
 
 Vect Plane::getColor() const
