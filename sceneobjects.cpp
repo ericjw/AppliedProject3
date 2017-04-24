@@ -82,20 +82,6 @@ bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const
 	}
 
 	return false;
-
-	
-	//Vect center(center.x, center.y, center.z);
-	//Vect n = Vect(normal.x, normal.y, normal.z);
-	//double denom = dot(n, dir);
-	//if (denom > 1e-6) {
-	//	t = -dot(center - orig, n) / denom;
-	//	if (t >= 0) {
-	//		//std::cout << "here";
-	//		return true;
-	//	}
-	//}
-
-	//return false;
 }
 
 Light::Light(Location loc, double inten)
