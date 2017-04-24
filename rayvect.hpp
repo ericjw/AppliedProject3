@@ -4,7 +4,6 @@
 class Vect {
 public:
 	Vect(double x_in, double y_in, double z_in);
-	Vect();
 
 	double x, y, z;
 };

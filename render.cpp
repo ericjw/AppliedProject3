@@ -11,7 +11,7 @@ RayTracer::RayTracer(std::vector<Light> li, Camera ca)
 }
 
 
-void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects) {
+void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, const std::string &fname) {
 	QImage img(cam.size[1], cam.size[0], QImage::Format_RGB32);
 	std::vector<std::vector<Vect>> pixelsX;
 
@@ -42,7 +42,7 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects) {
 		y = 0;
 	}
 
-	img.save("output.png");
+	img.save(fname.c_str());
 }
 
 bool RayTracer::trace(const Vect &orig, const Vect &dir, const std::vector<std::unique_ptr<Object>> &objects, double &distNear, const Object *&hitObject)
@@ -68,7 +68,7 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 		Vect point = orig + dir * dist;
 		Vect nhit = norm(point - Vect(hitObject->getCenter()));
 		Vect shadow_ray(Vect(lights.at(0).location.x, lights.at(0).location.y, lights.at(0).location.z));
-		double scale = dot();
+		//double scale = dot();
 
 		Vect col = hitObject->getColor();
 		return hitObject->getColor();

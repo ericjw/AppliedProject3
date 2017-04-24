@@ -14,7 +14,7 @@ public:
 	RayTracer(std::vector<Light> li, Camera ca);
 
 	Vect castRay(const Vect & orig, const Vect & dir, const std::vector<std::unique_ptr<Object>>& objects);
-	void render(const std::vector<std::unique_ptr<Object>>& objects);
+	void render(const std::vector<std::unique_ptr<Object>>& objects, const std::string &fname);
 	bool trace(const Vect &orig, const Vect &dir, const std::vector<std::unique_ptr<Object>> &objects, double &distNear, const Object *&hitObject);
 
 

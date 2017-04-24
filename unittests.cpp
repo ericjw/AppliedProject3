@@ -4,9 +4,9 @@
 
 //handle testing on windows/unix
 #ifdef _WIN32
-std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json";
+std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene1.json";
 #else
-std::string testFilePath = "/vagrant/tests/scene2.json";
+std::string testFilePath = "/vagrant/tests/scene1.json";
 #endif
 
 #include "parse.hpp"
@@ -160,43 +160,12 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE(l1.location.x == 0);
 	REQUIRE(l1.location.y == 0);
 	REQUIRE(l1.location.z == -10);
-
-	////planes
-	//Plane p1 = planes.at(0);
-	//REQUIRE(p1.center.x == 0);
-	//REQUIRE(p1.center.y == 0);
-	//REQUIRE(p1.center.z == 40);
-	//REQUIRE(p1.color.r == 100);
-	//REQUIRE(p1.color.g == 100);
-	//REQUIRE(p1.color.b == 100);
-	//REQUIRE(p1.lambert == 1);
-	//REQUIRE(p1.normal.x == 0);
-	//REQUIRE(p1.normal.y == 0);
-	//REQUIRE(p1.normal.z == -1);
-
-	////spheres
-	//Sphere s1 = spheres.at(0);
-	//REQUIRE(s1.center.x == 2);
-	//REQUIRE(s1.center.y == 0);
-	//REQUIRE(s1.center.z == 5);
-	//REQUIRE(s1.color.r == 200);
-	//REQUIRE(s1.color.g == 100);
-	//REQUIRE(s1.color.b == 100);
-	//REQUIRE(s1.lambert == 1);
-	//REQUIRE(s1.radius == 2);
 }
-
-//TEST_CASE("test intersections", "[render]") {
-//	Plane p1(Plane::Center{ 1.2, 2.3, 4.5 }, Plane::Normal{ 0., 0., 1. },
-//		Plane::Color{ 255., 128.9, 0. }, 1.);
-//	Sphere s1(Sphere::Center{ 1.2, 2.3, 4.5 }, Sphere::Color{ 123., 10., 17. }, 1., 3.14);
-//
-//}
 
 TEST_CASE("test rendering class", "[render]") {
 	std::vector<std::unique_ptr<Object>> objects;
 	JSONParse a(testFilePath);
 	a.parse(objects);
 	RayTracer tracer = RayTracer(a.getLights(), a.getCam());
-	tracer.render(objects);
+	tracer.render(objects, "output.png");
 }
