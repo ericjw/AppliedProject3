@@ -2,6 +2,16 @@
 #define _SCENE_OBJECTS_H
 #include "rayvect.hpp"
 
+class Object
+{
+public:
+	// virtual intersect function, needs to be overloaded by derived class
+	virtual bool intersect(const Vect &orig, const Vect &dir, double &t) const = 0;
+	virtual Vect getColor() const = 0;
+	virtual ~Object() {} // virtual destructor 
+	Object() {} // constructor 
+};
+
 class Camera {
 public:
 	
@@ -19,7 +29,7 @@ public:
 	Camera();
 };
 
-class Sphere {
+class Sphere : public Object{
 public:
 	double radius;
 	struct Center {
@@ -33,10 +43,13 @@ public:
 	
 	Sphere(Center cent, Color col, double lamb, double rad);
 
-	double getIntersection(const Ray &r);
+
+	Vect getColor() const;
+
+	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
 };
 
-class Plane {
+class Plane : public Object{
 public:
 	struct Normal {
 		double x, y, z;
@@ -53,8 +66,10 @@ public:
 	double lambert;
 
 	Plane(Center cent, Normal norm, Color col, double lamb);
+
+	Vect getColor() const;
 	
-	double getIntersection(const Ray &r);
+	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
 };
 
 class Light {
@@ -66,5 +81,8 @@ public:
 
 	Light(Location loc, double inten);
 };
+
+
+bool solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1);
 
 #endif // ! _SCENE_OBJECTS_H

@@ -1,6 +1,7 @@
 #include "sceneobjects.hpp"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 Camera::Camera(Center cent, double foc, Normal norm, double res[], int siz[])
 {
@@ -25,31 +26,31 @@ Sphere::Sphere(Center cent, Color col, double lamb, double rad)
 	radius = rad;
 }
 
-double Sphere::getIntersection(const Ray &r)
+Vect Sphere::getColor() const
 {
-	double t0, t1;
-	Vect L = r.origin - Vect(center.x, center.y, center.z);
-	double a = dot(r.direction, r.direction);
-	double b = 2 * dot(L, r.direction);
-	double c = dot(L, L) - (radius * radius);
+	return Vect(color.r, color.g, color.b);
+}
 
-	double disc = b*b - 4 * a*c;
-	if (disc > 0) {
-		double firstRoot = ((-b - sqrt(disc)) / 2);
-		if (firstRoot > 0) {
-			// the first root is the smallest positive root
-			return firstRoot;
-		}
-		else {
-			// the second root is the smallest positive root
-			double secondRoot = (-b + (sqrt(disc)) / 2);
-			return secondRoot;
-		}
+bool Sphere::intersect(const Vect & orig, const Vect & dir, double & t) const
+{
+	double t0, t1; // solutions for t if the ray intersects 
+
+				  // analytic solution
+	Vect L = orig - Vect(center.x, center.y, center.z);
+	double a = dot(dir, dir);
+	double b = 2 * dot(dir, L);
+	double c = dot(L, L) - radius*radius;
+	if (!solveQuadratic(a, b, c, t0, t1)) return false;
+	if (t0 > t1) std::swap(t0, t1);
+
+	if (t0 < 0) {
+		t0 = t1; // if t0 is negative, let's use t1 instead 
+		if (t0 < 0) return false; // both t0 and t1 are negative 
 	}
-	else {
-		//miss
-		return -1;
-	}
+
+	t = t0;
+
+	return true;
 }
 
 
@@ -61,23 +62,61 @@ Plane::Plane(Center cent, Normal norm, Color col, double lamb)
 	lambert = lamb;
 }
 
-double Plane::getIntersection(const Ray &r)
+Vect Plane::getColor() const
 {
-	Vect ray_dir = norm(r.direction);
-	Vect normVect = Vect(normal.x, normal.y, normal.z);
+	return Vect(color.r, color.g, color.b);
+}
 
-	double de = dot(Vect(normal.x, normal.y, normal.z), ray_dir);
-	if (de > 1e-6) {
-		Vect diff = Vect(center.x, center.y, center.z) - 
-			Vect(r.origin.x, r.origin.y, r.origin.z);
-		return dot(diff, normVect) / de;
+bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const
+{
+	//// assuming vectors are all normalized
+	//Vect n(normal.x, normal.y, normal.z);
+	//double denom = dot( n, dir);
+	//if (denom > 1e-6) {
+	//	Vect p0l0 = norm(Vect(center.x, center.y, center.z)) - orig;
+	//	t = dot(p0l0, n) / denom;
+	//	if (t >= 0) {
+	//		std::cout << "here";
+	//	}
+	//	return (t >= 0);
+	//}
+
+	//return false;
+
+	Vect center(center.x, center.y, center.z);
+	Vect n = norm(Vect(normal.x, normal.y, normal.z));
+	double denom = dot(n, dir);
+	if (denom > .00001) {
+		t = -dot(center - orig, n) / denom;
+		if (t >= 0) {
+			//std::cout << "here";
+			return true;
+		}
 	}
 
-	return -1;
+	return false;
 }
 
 Light::Light(Location loc, double inten)
 {
 	location = loc;
 	intensity = inten;
+}
+
+bool solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1)
+{
+	double discr = b * b - 4 * a * c;
+	if (discr < 0) return false;
+	else if (discr == 0) {
+		x0 = x1 = -0.5 * b / a;
+	}
+	else {
+		double q = (b > 0) ?
+			-0.5 * (b + sqrt(discr)) :
+			-0.5 * (b - sqrt(discr));
+		x0 = q / a;
+		x1 = c / q;
+	}
+
+	return true;
 }

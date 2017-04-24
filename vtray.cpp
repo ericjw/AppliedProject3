@@ -9,19 +9,20 @@ int main(int argc, char * argv[]) {
 	if (argc == 3) {
 
 		JSONParse x;
+		std::vector<std::unique_ptr<Object>> objects;
 		//open file
 		std::string jsonfname(argv[3]);
 		try {
 			x = JSONParse(jsonfname);
-			x.parse();
+			x.parse(objects);
 		}
 		catch (std::exception err) {
 			std::cerr << err.what() << std::endl;
 			return EXIT_FAILURE;
 		}
 
-		RayTracer tr = RayTracer(x.getLights(), x.getSpheres(), x.getPlanes(), x.getCam());
-		tr.render();
+		RayTracer tr = RayTracer(x.getLights(), x.getCam());
+		tr.render(objects);
 
 		//output file name
 		std::string outfname(argv[2]);
@@ -39,19 +40,21 @@ int main(int argc, char * argv[]) {
 
 		std::cout << "# threads " << threads << std::endl;
 
+		std::vector<std::unique_ptr<Object>> objects;
 		JSONParse x;
 		//open file
 		std::string jsonfname(argv[3]);
 		try {
 			x = JSONParse(jsonfname);
-			x.parse();
+			x.parse(objects);
 		}
 		catch (std::exception err) {
 			std::cerr << err.what() << std::endl;
 			return EXIT_FAILURE;
 		}
 		
-		RayTracer tr = RayTracer(x.getLights(), x.getSpheres(), x.getPlanes(), x.getCam());
+		RayTracer tr = RayTracer(x.getLights(),  x.getCam());
+		tr.render(objects);
 
 		//output file name
 		std::string outfname(argv[4]);

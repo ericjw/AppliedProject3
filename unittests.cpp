@@ -4,9 +4,9 @@
 
 //handle testing on windows/unix
 #ifdef _WIN32
-std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene0.json";
+std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json";
 #else
-std::string testFilePath = "/vagrant/tests/scene0.json";
+std::string testFilePath = "/vagrant/tests/scene2.json";
 #endif
 
 #include "parse.hpp"
@@ -58,17 +58,6 @@ TEST_CASE("tests vector creation and operations", "[rayvect]") {
 
 }
 
-TEST_CASE("test ray creation", "[ray]") {
-	Vect o(0, 0, 0), d(1,2,3);
-	Ray r(o, d);
-	REQUIRE(r.direction.x == 1);
-	REQUIRE(r.direction.y == 2);
-	REQUIRE(r.direction.z == 3);
-
-	REQUIRE(r.origin.x == 0);
-	REQUIRE(r.origin.y == 0);
-	REQUIRE(r.origin.z == 0);
-}
 
 TEST_CASE("Test creation of sphere and plane", "[sceneobjects]") {
 	Plane p1(Plane::Center{ 1.2, 2.3, 4.5 }, Plane::Normal{0., 0., 1.},
@@ -138,17 +127,19 @@ TEST_CASE("Test creation of light and camera", "[sceneobjects]") {
 TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE_THROWS_AS(JSONParse oops("bad/file/name.json"), std::invalid_argument);
 
-	JSONParse a(testFilePath);
-	a.parse();
+	std::vector<std::unique_ptr<Object>> objects;
+	//JSONParse a(testFilePath);
+	//JSONParse a("C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json");
+	JSONParse a("/vagrant/tests/scene2.json");
+	a.parse(objects);
 
 	Camera cam = a.getCam();
 	std::vector<Light> lights = a.getLights();
-	std::vector<Plane> planes = a.getPlanes();
-	std::vector<Sphere> spheres = a.getSpheres();
+	//std::vector<Plane> planes = a.getPlanes();
+	//std::vector<Sphere> spheres = a.getSpheres();
 
 	REQUIRE(lights.size() == 64);
-	REQUIRE(planes.size() == 5);
-	REQUIRE(spheres.size() == 4);
+	REQUIRE(objects.size() == 9);
 
 	//camera
 	REQUIRE(cam.center.x == 0);
@@ -170,29 +161,29 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE(l1.location.y == 0);
 	REQUIRE(l1.location.z == -10);
 
-	//planes
-	Plane p1 = planes.at(0);
-	REQUIRE(p1.center.x == 0);
-	REQUIRE(p1.center.y == 0);
-	REQUIRE(p1.center.z == 40);
-	REQUIRE(p1.color.r == 100);
-	REQUIRE(p1.color.g == 100);
-	REQUIRE(p1.color.b == 100);
-	REQUIRE(p1.lambert == 1);
-	REQUIRE(p1.normal.x == 0);
-	REQUIRE(p1.normal.y == 0);
-	REQUIRE(p1.normal.z == -1);
+	////planes
+	//Plane p1 = planes.at(0);
+	//REQUIRE(p1.center.x == 0);
+	//REQUIRE(p1.center.y == 0);
+	//REQUIRE(p1.center.z == 40);
+	//REQUIRE(p1.color.r == 100);
+	//REQUIRE(p1.color.g == 100);
+	//REQUIRE(p1.color.b == 100);
+	//REQUIRE(p1.lambert == 1);
+	//REQUIRE(p1.normal.x == 0);
+	//REQUIRE(p1.normal.y == 0);
+	//REQUIRE(p1.normal.z == -1);
 
-	//spheres
-	Sphere s1 = spheres.at(0);
-	REQUIRE(s1.center.x == 2);
-	REQUIRE(s1.center.y == 0);
-	REQUIRE(s1.center.z == 5);
-	REQUIRE(s1.color.r == 200);
-	REQUIRE(s1.color.g == 100);
-	REQUIRE(s1.color.b == 100);
-	REQUIRE(s1.lambert == 1);
-	REQUIRE(s1.radius == 2);
+	////spheres
+	//Sphere s1 = spheres.at(0);
+	//REQUIRE(s1.center.x == 2);
+	//REQUIRE(s1.center.y == 0);
+	//REQUIRE(s1.center.z == 5);
+	//REQUIRE(s1.color.r == 200);
+	//REQUIRE(s1.color.g == 100);
+	//REQUIRE(s1.color.b == 100);
+	//REQUIRE(s1.lambert == 1);
+	//REQUIRE(s1.radius == 2);
 }
 
 TEST_CASE("test intersections", "[render]") {
@@ -200,14 +191,12 @@ TEST_CASE("test intersections", "[render]") {
 		Plane::Color{ 255., 128.9, 0. }, 1.);
 	Sphere s1(Sphere::Center{ 1.2, 2.3, 4.5 }, Sphere::Color{ 123., 10., 17. }, 1., 3.14);
 
-	Ray r(Vect(0,-10, 0), Vect(0, 1, 0));
-	//REQUIRE(s1.getIntersection(r) == 0);
-
 }
 
 TEST_CASE("test rendering class", "[render]") {
+	std::vector<std::unique_ptr<Object>> objects;
 	JSONParse a(testFilePath);
-	a.parse();
-	RayTracer tracer = RayTracer(a.getLights(), a.getSpheres(), a.getPlanes(), a.getCam());
-	tracer.render();
+	a.parse(objects);
+	RayTracer tracer = RayTracer(a.getLights(), a.getCam());
+	tracer.render(objects);
 }

@@ -5,30 +5,36 @@
 #include <fstream>
 #include <QJsonDocument>
 #include <vector>
+#include <memory>
 #include "sceneobjects.hpp"
 
 class JSONParse {
 public:
 	//take in a file name, read into a QJsonDocument, 
 	//and store values in the scene
-	JSONParse(std::string fname);
 	JSONParse();
+	JSONParse(std::string fname);
+//	JSONParse(std::vector<std::unique_ptr<Object>> &objects);
 
 	//read in all json key/value pairs and store as internal objects
-	void parse();
+
+	void parse(std::vector<std::unique_ptr<Object>>& objects);
 
 	//getters
-	std::vector<Sphere> getSpheres();
+	/*std::vector<Sphere> getSpheres();
+	std::vector<Plane> getPlanes();*/
+
 	std::vector<Light> getLights();
-	std::vector<Plane> getPlanes();
 	Camera getCam();
+	//std::vector<std::unique_ptr<Object>>& getObjects();
 
 private:
 	QJsonDocument jdoc;
-	std::vector<Sphere> spheres;
+//	std::vector<Sphere> spheres;
 	std::vector<Light> lights;
-	std::vector<Plane> planes;
+//	std::vector<Plane> planes;
 	Camera cam;
+	
 };
 
 #endif // !_PARSE_H

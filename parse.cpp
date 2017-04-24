@@ -21,7 +21,7 @@ JSONParse::JSONParse() {
 
 }
 
-void JSONParse::parse() {
+void JSONParse::parse(std::vector<std::unique_ptr<Object>> &objects) {
 	QJsonObject obj = jdoc.object();
 	QJsonObject camer = obj["camera"].toObject();
 	QJsonObject center = camer["center"].toObject();
@@ -52,38 +52,34 @@ void JSONParse::parse() {
 		if (curr["type"].toString() == "sphere") {
 			QJsonObject loc = curr["center"].toObject();
 			QJsonObject col = curr["color"].toObject();
-			spheres.push_back(Sphere(Sphere::Center{ loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble() }, 
+
+			objects.push_back(std::unique_ptr<Object>(new Sphere(Sphere::Center{ loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble() },
 				Sphere::Color{ col["r"].toDouble(), col["g"].toDouble(), col["b"].toDouble() },
-				curr["lambert"].toDouble(), curr["radius"].toDouble()));
+				curr["lambert"].toDouble(), curr["radius"].toDouble())));
 		}
 		else if (curr["type"].toString() == "plane") {
 			QJsonObject norm = curr["normal"].toObject();
 			QJsonObject loc = curr["center"].toObject();
 			QJsonObject col = curr["color"].toObject();
-			planes.push_back(Plane(Plane::Center{ loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble() }, 
+
+			objects.push_back(std::unique_ptr<Object>(new Plane(Plane::Center{ loc["x"].toDouble(), loc["y"].toDouble(), loc["z"].toDouble() },
 				Plane::Normal{norm["x"].toDouble(), norm["y"].toDouble(), norm["z"].toDouble()}, 
 				Plane::Color{ col["r"].toDouble(), col["g"].toDouble(), col["b"].toDouble() }, 
-				curr["lambert"].toDouble()));
+				curr["lambert"].toDouble())));
 		}
 	}
 }
 
-std::vector<Sphere> JSONParse::getSpheres()
-{
-	return spheres;
-}
 
 std::vector<Light> JSONParse::getLights()
 {
 	return lights;
 }
 
-std::vector<Plane> JSONParse::getPlanes()
-{
-	return planes;
-}
 
 Camera JSONParse::getCam()
 {
 	return cam;
 }
+
+

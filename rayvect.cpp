@@ -24,8 +24,3 @@ Vect norm(Vect arg) {
 	return Vect(arg.x/mag, arg.y/mag, arg.z/mag);
 }
 
-Ray::Ray(Vect ori, Vect dir)
-{
-	origin = ori;
-	direction = dir;
-}

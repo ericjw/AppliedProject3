@@ -42,11 +42,4 @@ inline Vect operator-(Vect lhs, const Vect& rhs)
 double dot(Vect a, Vect b);
 Vect norm(Vect arg);
 
-class Ray {
-public:
-	Ray(Vect ori, Vect dir);
-
-	Vect origin, direction;
-};
-
 #endif 
