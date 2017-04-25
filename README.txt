@@ -1,6 +1,3 @@
-Put Your design decisions here. What modules you defined and how they
-interact to solve the ray tracing problem.
-
 Modules in project: 
 	RayVect
 		The RayVect module defines a 3d vector class and the basic operations needed for manipulation 
