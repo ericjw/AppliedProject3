@@ -17,18 +17,18 @@ public:
 
 	//read in all json key/value pairs and store as internal objects
 	void parse(std::vector<std::unique_ptr<Object>>& objects);
-	bool checkKeys();
+	
 
 	std::vector<Light> getLights();
 	Camera getCam();
 
 private:	
+	bool checkKeys();
 
-	//bool checkCam();
-	//bool checkObj();
-	//bool checkLights();
-
-	bool checkValues();
+	void checkCamValues();
+	void checkLightValues();
+	void checkPlaneValues(Plane p);
+	void checkSphereValues(Sphere s);
 	
 	QJsonDocument jdoc;
 	std::vector<Light> lights;

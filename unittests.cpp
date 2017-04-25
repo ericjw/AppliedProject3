@@ -4,9 +4,9 @@
 
 //handle testing on windows/unix
 #ifdef _WIN32
-std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene1.json";
+std::string testFilePath = "C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json";
 #else
-std::string testFilePath = "/vagrant/tests/scene1.json";
+std::string testFilePath = "/vagrant/tests/scene2.json";
 #endif
 
 #include "parse.hpp"
@@ -163,11 +163,21 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 TEST_CASE("Test bad JSON files parsing", "[JSON]") {
 
 	std::vector<std::unique_ptr<Object>> objects;
+
 	JSONParse bad("/vagrant/tests/scene4.json");
+	REQUIRE_THROWS_AS(bad.parse(objects), std::invalid_argument);
+
+	bad = JSONParse("/vagrant/tests/scene3.json");
 	REQUIRE_THROWS_AS(bad.parse(objects), std::invalid_argument);
 
 	for (int i = 1; i <= 13; i++) {
 		std::string file = "/vagrant/tests/badfiles/badparse" + std::to_string(i) + ".json";
+		bad = JSONParse(file.c_str());
+		REQUIRE_THROWS_AS(bad.parse(objects), std::invalid_argument);
+	}
+
+	for (int i = 1; i <= 4; i++) {
+		std::string file = "/vagrant/tests/badfiles/badvalue" + std::to_string(i) + ".json";
 		bad = JSONParse(file.c_str());
 		REQUIRE_THROWS_AS(bad.parse(objects), std::invalid_argument);
 	}

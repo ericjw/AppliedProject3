@@ -38,19 +38,22 @@ Vect Sphere::getColor() const
 
 bool Sphere::intersect(const Vect & orig, const Vect & dir, double & t) const
 {
-	double t0, t1; // solutions for t if the ray intersects 
+	double t0, t1; 
 
-				  // analytic solution
 	Vect L = orig - Vect(center.x, center.y, center.z);
 	double a = dot(dir, dir);
 	double b = 2 * dot(dir, L);
 	double c = dot(L, L) - radius*radius;
-	if (!solveQuadratic(a, b, c, t0, t1)) return false;
+	if (!solveQuadratic(a, b, c, t0, t1)) {
+		return false;
+	}
 	if (t0 > t1) std::swap(t0, t1);
 
 	if (t0 < 0) {
 		t0 = t1; // if t0 is negative, let's use t1 instead 
-		if (t0 < 0) return false; // both t0 and t1 are negative 
+		if (t0 < 0) {
+			return false; // both t0 and t1 are negative
+		}
 	}
 
 	t = t0;
@@ -86,7 +89,6 @@ bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const
 		Vect p0l0 = Vect(center.x, center.y, center.z) - orig;
 		t = dot(p0l0, n) / denom;
 		if (t >= 0) {
-			//std::cout << "here";
 		}
 		return (t >= 0);
 	}
@@ -103,8 +105,10 @@ Light::Light(Location loc, double inten)
 bool solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1)
 {
 	double discr = b * b - 4 * a * c;
-	if (discr < 0) return false;
-	else if (discr == 0) {
+	if (discr < 0) {
+		return false;
+	}
+	if (discr == 0) {
 		x0 = x1 = -0.5 * b / a;
 	}
 	else {

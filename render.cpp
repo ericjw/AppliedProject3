@@ -13,11 +13,11 @@ RayTracer::RayTracer(std::vector<Light> li, Camera ca)
 
 void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, const std::string &fname) {
 	QImage img(cam.size[1], cam.size[0], QImage::Format_RGB32);
-	std::vector<std::vector<Vect>> pixelsX;
+	//std::vector<std::vector<Vect>> pixelsX;
 
 	Vect orig = Vect(cam.center.x, cam.center.y, cam.center.z) - (Vect(cam.normal.x, cam.normal.y, cam.normal.z) * cam.focus);
 	for (int x = 0; x < cam.size[1]; x++) {
-		std::vector<Vect> pixelsY;
+		//std::vector<Vect> pixelsY;
 		for (int y = 0; y < cam.size[0]; y++) {
 
 			double i = cam.resolution[1] * (x - (cam.size[1]/2));
@@ -25,13 +25,13 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 
 			Vect dir = norm(Vect(i,j,0) - orig);
 			Vect tmp = castRay(orig, dir, objects);
-			pixelsY.push_back(tmp);
-			//img.setPixel(x, y, QColor(tmp.x, tmp.y, tmp.z).rgb());
+			//pixelsY.push_back(tmp);
+			img.setPixel(x, y, QColor(tmp.x, tmp.y, tmp.z).rgb());
 		}
-		pixelsX.push_back(pixelsY);
+		//pixelsX.push_back(pixelsY);
 	}
 
-	int x = 0;
+	/*int x = 0;
 	int y = 0;
 	for (auto vx : pixelsX) {
 		for (auto vy : vx) {
@@ -40,7 +40,7 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 		}
 		x++;
 		y = 0;
-	}
+	}*/
 
 	img.save(fname.c_str());
 }
@@ -68,9 +68,8 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 		Vect point = orig + dir * dist;
 		Vect nhit = norm(point - Vect(hitObject->getCenter()));
 		Vect shadow_ray(Vect(lights.at(0).location.x, lights.at(0).location.y, lights.at(0).location.z));
-		//double scale = dot();
-
 		Vect col = hitObject->getColor();
+
 		return hitObject->getColor();
 	}
 
