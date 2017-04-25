@@ -7,7 +7,7 @@
 #include <memory>
 #include <limits>
 
-const double kInfinity = std::numeric_limits<double>::max();
+const double distInfinity = std::numeric_limits<double>::max();
 
 class RayTracer {
 public:

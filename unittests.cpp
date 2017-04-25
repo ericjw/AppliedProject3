@@ -128,9 +128,9 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE_THROWS_AS(JSONParse oops("bad/file/name.json"), std::invalid_argument);
 
 	std::vector<std::unique_ptr<Object>> objects;
-	//JSONParse a(testFilePath);
+	JSONParse a(testFilePath);
 	//JSONParse a("C:\\Users\\ejwal\\Documents\\ECE 3574\\project3-ericjw\\tests\\scene2.json");
-	JSONParse a("/vagrant/tests/scene2.json");
+	//JSONParse a("/vagrant/tests/scene2.json");
 	a.parse(objects);
 
 	Camera cam = a.getCam();

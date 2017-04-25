@@ -50,14 +50,13 @@ bool Sphere::intersect(const Vect & orig, const Vect & dir, double & t) const
 	if (t0 > t1) std::swap(t0, t1);
 
 	if (t0 < 0) {
-		t0 = t1; // if t0 is negative, let's use t1 instead 
+		t0 = t1; 
 		if (t0 < 0) {
-			return false; // both t0 and t1 are negative
+			return false;
 		}
 	}
 
 	t = t0;
-
 	return true;
 }
 
@@ -82,14 +81,11 @@ Vect Plane::getColor() const
 
 bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const
 {
-	// assuming vectors are all normalized
 	Vect n(normal.x, normal.y, normal.z);
 	double denom = dot( n, dir);
 	if (denom > 1e-6 || denom < -1e-6) {
-		Vect p0l0 = Vect(center.x, center.y, center.z) - orig;
-		t = dot(p0l0, n) / denom;
-		if (t >= 0) {
-		}
+		Vect dis = Vect(center.x, center.y, center.z) - orig;
+		t = dot(dis, n) / denom;
 		return (t >= 0);
 	}
 
@@ -112,9 +108,13 @@ bool solveQuadratic(const double &a, const double &b, const double &c, double &x
 		x0 = x1 = -0.5 * b / a;
 	}
 	else {
-		double q = (b > 0) ?
-			-0.5 * (b + sqrt(discr)) :
-			-0.5 * (b - sqrt(discr));
+		double q;
+		if (b > 0) {
+			q = -0.5 * (b + sqrt(discr));
+		}
+		else {
+			q = -0.5 * (b - sqrt(discr));
+		}
 		x0 = q / a;
 		x1 = c / q;
 	}

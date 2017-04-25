@@ -47,10 +47,10 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 
 bool RayTracer::trace(const Vect &orig, const Vect &dir, const std::vector<std::unique_ptr<Object>> &objects, double &distNear, const Object *&hitObject)
 {
-	distNear = kInfinity;
-	std::vector<std::unique_ptr<Object>>::const_iterator iter = objects.begin();
-	for (; iter != objects.end(); ++iter) {
-		double dist = kInfinity;
+	distNear = distInfinity;
+
+	for (std::vector<std::unique_ptr<Object>>::const_iterator iter = objects.begin(); iter != objects.end(); ++iter) {
+		double dist = distInfinity;
 		if ((*iter)->intersect(orig, dir, dist) && dist < distNear) {
 			hitObject = iter->get();
 			distNear = dist;

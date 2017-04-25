@@ -23,8 +23,9 @@ public:
 	Camera getCam();
 
 private:	
-	bool checkKeys();
 
+	//check for parse errors
+	bool checkKeys();
 	void checkCamValues();
 	void checkLightValues();
 	void checkPlaneValues(Plane p);
