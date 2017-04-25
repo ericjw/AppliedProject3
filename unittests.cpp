@@ -135,8 +135,6 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 
 	Camera cam = a.getCam();
 	std::vector<Light> lights = a.getLights();
-	//std::vector<Plane> planes = a.getPlanes();
-	//std::vector<Sphere> spheres = a.getSpheres();
 
 	REQUIRE(lights.size() == 64);
 	REQUIRE(objects.size() == 9);
@@ -160,6 +158,19 @@ TEST_CASE("Test JSON Parsing", "[JSON]") {
 	REQUIRE(l1.location.x == 0);
 	REQUIRE(l1.location.y == 0);
 	REQUIRE(l1.location.z == -10);
+}
+
+TEST_CASE("Test bad JSON files parsing", "[JSON]") {
+
+	std::vector<std::unique_ptr<Object>> objects;
+	JSONParse bad("/vagrant/tests/scene4.json");
+	REQUIRE_THROWS_AS(bad.parse(objects), std::invalid_argument);
+
+	for (int i = 1; i <= 13; i++) {
+		std::string file = "/vagrant/tests/badfiles/badparse" + std::to_string(i) + ".json";
+		bad = JSONParse(file.c_str());
+		REQUIRE_THROWS_AS(bad.parse(objects), std::invalid_argument);
+	}
 }
 
 TEST_CASE("test rendering class", "[render]") {

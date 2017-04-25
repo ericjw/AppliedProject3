@@ -16,7 +16,7 @@ int main(int argc, char * argv[]) {
 			x = JSONParse(jsonfname);
 			x.parse(objects);
 		}
-		catch (std::exception err) {
+		catch (std::exception& err) {
 			std::cerr << err.what() << std::endl;
 			return EXIT_FAILURE;
 		}
@@ -49,7 +49,7 @@ int main(int argc, char * argv[]) {
 			x = JSONParse(jsonfname);
 			x.parse(objects);
 		}
-		catch (std::exception err) {
+		catch (std::exception& err) {
 			std::cerr << err.what() << std::endl;
 			return EXIT_FAILURE;
 		}

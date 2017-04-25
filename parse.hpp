@@ -14,25 +14,24 @@ public:
 	//and store values in the scene
 	JSONParse();
 	JSONParse(std::string fname);
-//	JSONParse(std::vector<std::unique_ptr<Object>> &objects);
 
 	//read in all json key/value pairs and store as internal objects
-
 	void parse(std::vector<std::unique_ptr<Object>>& objects);
-
-	//getters
-	/*std::vector<Sphere> getSpheres();
-	std::vector<Plane> getPlanes();*/
+	bool checkKeys();
 
 	std::vector<Light> getLights();
 	Camera getCam();
-	//std::vector<std::unique_ptr<Object>>& getObjects();
 
-private:
+private:	
+
+	//bool checkCam();
+	//bool checkObj();
+	//bool checkLights();
+
+	bool checkValues();
+	
 	QJsonDocument jdoc;
-//	std::vector<Sphere> spheres;
 	std::vector<Light> lights;
-//	std::vector<Plane> planes;
 	Camera cam;
 	
 };
