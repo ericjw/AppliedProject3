@@ -116,25 +116,25 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 		Vect totalCol = Vect(0, 0, 0);
 
 		Vect point = orig + dir * dist;
-		Vect nhit = norm(point - Vect(hitObject->getCenter()));
+		Vect nhit = hitObject->getCollisonNorm(point);
 		double shadowDist;
 
 		for (auto l : lights) {
 			Vect shadow_ray(Vect(l.location.x, l.location.y, l.location.z) - point);
 			const Object *testing = nullptr;
-			bool tmp = trace(point, norm(shadow_ray), objects, shadowDist, testing);
+			//bool tmp = trace(point, norm(shadow_ray), objects, shadowDist, testing);
 			//if not shadowed
-			if (std::fabs(shadowDist) > 1 && !tmp) {
+			if (true){ //std::fabs(shadowDist) > 1 && !tmp) {
 				double scale = dot(nhit, shadow_ray) * hitObject->getLambert();
 				if (scale < 0) {
 					scale = 0;
 				}
-				totalCol = totalCol + (col * scale * l.intensity);
+				totalCol = totalCol + (col * (scale * l.intensity));
 			}
-
 		}
 		return totalCol;
 	}
 
+	//if no objects hit
 	return Vect(0, 0, 0);
 }

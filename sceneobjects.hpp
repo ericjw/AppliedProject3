@@ -9,6 +9,7 @@ public:
 	virtual Vect getColor() const = 0;
 	virtual Vect getCenter() const = 0;
 	virtual double getLambert() const = 0;
+	virtual Vect getCollisonNorm(const Vect & hPoint) const = 0;
 	virtual ~Object() {} 
 	Object() {} 
 };
@@ -47,6 +48,7 @@ public:
 	Vect getCenter() const;
 	Vect getColor() const;
 	double getLambert() const;
+	Vect getCollisonNorm(const Vect & hPoint) const;
 
 	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
 };
@@ -72,6 +74,7 @@ public:
 	Vect getCenter() const;
 	Vect getColor() const;
 	double getLambert() const;
+	Vect getCollisonNorm(const Vect & hPoint) const;
 	
 	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
 };

@@ -41,6 +41,11 @@ double Sphere::getLambert() const
 	return lambert;
 }
 
+Vect Sphere::getCollisonNorm(const Vect & hPoint) const
+{
+	return norm(hPoint - getCenter());
+}
+
 bool Sphere::intersect(const Vect & orig, const Vect & dir, double & t) const
 {
 	double t0, t1; 
@@ -87,6 +92,11 @@ Vect Plane::getColor() const
 double Plane::getLambert() const
 {
 	return lambert;
+}
+
+Vect Plane::getCollisonNorm(const Vect & hPoint) const
+{
+	return Vect(normal.x, normal.y, normal.z);
 }
 
 bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const
