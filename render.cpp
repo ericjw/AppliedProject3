@@ -117,11 +117,14 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 
 		Vect point = orig + dir * dist;
 		Vect nhit = norm(point - Vect(hitObject->getCenter()));
+		double shadowDist;
 
 		for (auto l : lights) {
 			Vect shadow_ray(Vect(l.location.x, l.location.y, l.location.z) - point);
+			const Object *testing = nullptr;
+			bool tmp = trace(point, norm(shadow_ray), objects, shadowDist, testing);
 			//if not shadowed
-			if (true) { //!trace(point, shadow_ray, objects, dist, hitObject)) {
+			if (std::fabs(shadowDist) > 1 && !tmp) {
 				double scale = dot(nhit, shadow_ray) * hitObject->getLambert();
 				if (scale < 0) {
 					scale = 0;
