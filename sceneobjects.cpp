@@ -36,6 +36,11 @@ Vect Sphere::getColor() const
 	return Vect(color.r, color.g, color.b);
 }
 
+double Sphere::getLambert() const
+{
+	return lambert;
+}
+
 bool Sphere::intersect(const Vect & orig, const Vect & dir, double & t) const
 {
 	double t0, t1; 
@@ -77,6 +82,11 @@ Vect Plane::getCenter() const
 Vect Plane::getColor() const
 {
 	return Vect(color.r, color.g, color.b);
+}
+
+double Plane::getLambert() const
+{
+	return lambert;
 }
 
 bool Plane::intersect(const Vect & orig, const Vect & dir, double & t) const

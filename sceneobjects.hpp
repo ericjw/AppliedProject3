@@ -8,6 +8,7 @@ public:
 	virtual bool intersect(const Vect &orig, const Vect &dir, double &t) const = 0;
 	virtual Vect getColor() const = 0;
 	virtual Vect getCenter() const = 0;
+	virtual double getLambert() const = 0;
 	virtual ~Object() {} 
 	Object() {} 
 };
@@ -45,6 +46,7 @@ public:
 
 	Vect getCenter() const;
 	Vect getColor() const;
+	double getLambert() const;
 
 	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
 };
@@ -69,6 +71,7 @@ public:
 
 	Vect getCenter() const;
 	Vect getColor() const;
+	double getLambert() const;
 	
 	bool intersect(const Vect &orig, const Vect &dir, double &t) const;
 };
