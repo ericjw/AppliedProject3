@@ -185,7 +185,8 @@ TEST_CASE("Test bad JSON files parsing", "[JSON]") {
 
 TEST_CASE("test rendering class", "[render]") {
 	std::vector<std::unique_ptr<Object>> objects;
-	JSONParse a(testFilePath);
+	//JSONParse a(testFilePath);
+	JSONParse a("/vagrant/tests/scene1.json");
 	a.parse(objects);
 	RayTracer tracer = RayTracer(a.getLights(), a.getCam());
 	tracer.render(objects, "output.png");

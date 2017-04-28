@@ -98,7 +98,7 @@ bool RayTracer::trace(const Vect &orig, const Vect &dir, const std::vector<std::
 
 	for (std::vector<std::unique_ptr<Object>>::const_iterator iter = objects.begin(); iter != objects.end(); ++iter) {
 		double dist = distInfinity;
-		if ((*iter)->intersect(orig, dir, dist) && dist < distNear) {
+		if ((*iter)->intersect(orig, dir, dist) && dist < distNear && dist > 1e-5) {
 			hitObject = iter->get();
 			distNear = dist;
 		}
@@ -122,9 +122,10 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 		for (auto l : lights) {
 			Vect shadow_ray(Vect(l.location.x, l.location.y, l.location.z) - point);
 			const Object *testing = nullptr;
-			//bool tmp = trace(point, norm(shadow_ray), objects, shadowDist, testing);
+			bool tmp = trace(point, norm(shadow_ray), objects, shadowDist, testing);
+			bool shadow = (tmp && shadowDist > 1e-4);
 			//if not shadowed
-			if (true){ //std::fabs(shadowDist) > 1 && !tmp) {
+			if (!shadow) {
 				double scale = dot(nhit, shadow_ray) * hitObject->getLambert();
 				if (scale < 0) {
 					scale = 0;
