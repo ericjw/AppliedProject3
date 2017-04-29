@@ -119,16 +119,16 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 		Vect nhit = hitObject->getCollisonNorm(point);
 		double shadowDist;
 		double imagePlaneDist;
-
+		
 		for (auto l : lights) {
 			imagePlaneDist = distInfinity;
 
-			Vect shadow_ray(Vect(l.location.x, l.location.y, l.location.z) - point);
+			Vect shadow_ray = norm((Vect(l.location.x, l.location.y, l.location.z) - point));
 			const Object *tmp = nullptr;
 			Plane camPlane(Plane::Center{cam.center.x, cam.center.y, cam.center.z}, 
 				Plane::Normal{cam.normal.x, cam.normal.y, cam.normal.z}, Plane::Color{ 0,0,0 }, 0);
 
-			camPlane.intersect(point, norm(shadow_ray), imagePlaneDist);
+			camPlane.intersect(point, shadow_ray, imagePlaneDist);
 			trace(point, norm(shadow_ray), objects, shadowDist, tmp);
 
 			//if not shadowed
