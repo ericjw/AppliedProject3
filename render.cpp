@@ -1,7 +1,7 @@
 #include "render.hpp"
 #include <QColor>
 #include <QImage>
-#include <QDebug>
+#include <thread>
 
 RayTracer::RayTracer(std::vector<Light> li, Camera ca)
 {
@@ -9,24 +9,43 @@ RayTracer::RayTracer(std::vector<Light> li, Camera ca)
 	cam = ca;
 }
 
+void RayTracer::renderPart(const std::vector<std::unique_ptr<Object>> &objects, const Vect &orig, const int &minY, const int &maxY, std::vector<std::vector<Vect>> &pixelsX) {
+	for (int x = 0; x < cam.size[1]; x++) {
+		std::vector<Vect> pixelsY;
+		for (int y = minY; y < maxY; y++) {
 
-void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, const std::string &fname) {
+			double i = cam.resolution[1] * (x - (cam.size[1] / 2));
+			double j = cam.resolution[0] * (y - (cam.size[0] / 2));
+
+			Vect dir = norm(Vect(i, j, 0) - orig);
+			Vect col = castRay(orig, dir, objects);
+			pixelsY.push_back(col);
+		}
+		std::lock_guard<std::mutex> lock(mut);
+		pixelsX.push_back(pixelsY);
+	}
+}
+
+void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, const std::string &fname, const int &numThreads) {
 	QImage img(cam.size[1], cam.size[0], QImage::Format_RGB32);
 	std::vector<std::vector<Vect>> pixelsX;
 
 	Vect orig = Vect(cam.center.x, cam.center.y, cam.center.z) - (Vect(cam.normal.x, cam.normal.y, cam.normal.z) * cam.focus);
-	for (int x = 0; x < cam.size[1]; x++) {
-		std::vector<Vect> pixelsY;
-		for (int y = 0; y < cam.size[0]; y++) {
+	int maxY = cam.size[0] / numThreads;
+	int minY = 0;
 
-			double i = cam.resolution[1] * (x - (cam.size[1]/2));
-			double j = cam.resolution[0] * (y - (cam.size[0]/2));
+	//hold reference to all the threads and start them
+	std::vector<std::thread> threads;
+	for (int t = 0; t < numThreads; t++) {
+		//threads.push_back(std::thread(&RayTracer::renderPart, this, &objects, orig, minY, maxY, pixelsX));
+		threads.push_back(std::thread([this, &objects, orig, minY, maxY, &pixelsX]() {renderPart(objects, orig, minY, maxY, pixelsX); }));
+		maxY += cam.size[0] / numThreads;
+		minY += cam.size[0] / numThreads;
+	}
 
-			Vect dir = norm(Vect(i,j,0) - orig);
-			Vect tmp = castRay(orig, dir, objects);
-			pixelsY.push_back(tmp);
-		}
-		pixelsX.push_back(pixelsY);
+	//sync threads back up
+	for (int th = 0; th < threads.size(); th++) {
+		threads.at(th).join();
 	}
 
 	//find max for autoexposure

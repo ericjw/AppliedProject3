@@ -188,6 +188,6 @@ TEST_CASE("test rendering class", "[render]") {
 	//JSONParse a(testFilePath);
 	JSONParse a("/vagrant/tests/scene1.json");
 	a.parse(objects);
-	RayTracer tracer = RayTracer(a.getLights(), a.getCam());
-	tracer.render(objects, "output.png");
+	RayTracer tracer(a.getLights(), a.getCam());
+	tracer.render(objects, "output.png", 1);
 }

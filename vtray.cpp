@@ -25,8 +25,8 @@ int main(int argc, char * argv[]) {
 		std::string outfname(argv[2]);
 		//std::cout << std::endl << outfname << std::endl;
 
-		RayTracer tr = RayTracer(x.getLights(), x.getCam());
-		tr.render(objects, outfname);
+		RayTracer tr(x.getLights(), x.getCam());
+		tr.render(objects, outfname, 1);
 		
 	}
 	else if (argc == 5) {
@@ -58,8 +58,8 @@ int main(int argc, char * argv[]) {
 		std::string outfname(argv[4]);
 		//std::cout << std::endl << outfname << std::endl;
 
-		RayTracer tr = RayTracer(x.getLights(), x.getCam());
-		tr.render(objects, outfname);
+		RayTracer tr(x.getLights(), x.getCam());
+		tr.render(objects, outfname, threads);
 	}
 	else {
 		std::cerr << "Error: Invalid number of arguments" << std::endl;
