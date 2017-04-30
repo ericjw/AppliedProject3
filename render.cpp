@@ -25,11 +25,11 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 			Vect dir = norm(Vect(i,j,0) - orig);
 			Vect tmp = castRay(orig, dir, objects);
 			pixelsY.push_back(tmp);
-			//img.setPixel(x, y, QColor(tmp.x, tmp.y, tmp.z).rgb());
 		}
 		pixelsX.push_back(pixelsY);
 	}
 
+	//find max for autoexposure
 	double max = 0;
 	for (auto vx : pixelsX) {
 		for (auto vy : vx) {
@@ -46,6 +46,7 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 		}
 	}
 
+	//scale all values by max
 	for (std::vector<Vect> &vx : pixelsX) {
 		for (Vect &vy : vx) {
 			double tmpScale = (255. / max);
@@ -53,21 +54,7 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 		}
 	}
 
-	//double newmax = 0;
-	//for (auto vx : pixelsX) {
-	//	for (auto vy : vx) {
-	//		if (vy.x > newmax) {
-	//			newmax = vy.x;
-	//		}
-	//		else if (vy.y > newmax) {
-	//			newmax = vy.y;
-	//		}
-	//		else if (vy.z > newmax) {
-	//			newmax = vy.z;
-	//		}
-	//	}
-	//}
-
+	//set each pixel in image
 	int x = 0;
 	int y = 0;
 	for (auto vx : pixelsX) {
@@ -78,16 +65,6 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 		x++;
 		y = 0;
 	}
-
-	//for (auto vx : pixelsX) {
-	//	for (auto vy : vx) {
-	//		if (vy.x != 0 || vy.y != 0 ||vy.z != 0)
-	//			qDebug() << "x " << vy.x << " y " << vy.y << " z " << vy.z;
-	//	}
-
-	//}
-
-	qDebug() << "max " << max; // << " newmax " << newmax;
 
 	img.save(fname.c_str());
 }
@@ -119,19 +96,19 @@ Vect RayTracer::castRay (const Vect &orig, const Vect &dir, const std::vector<st
 		Vect nhit = hitObject->getCollisonNorm(point);
 		double shadowDist;
 		double imagePlaneDist;
-		
+		const Object *tmp = nullptr;
+
 		for (auto l : lights) {
 			imagePlaneDist = distInfinity;
 
 			Vect shadow_ray = norm((Vect(l.location.x, l.location.y, l.location.z) - point));
-			const Object *tmp = nullptr;
 			Plane camPlane(Plane::Center{cam.center.x, cam.center.y, cam.center.z}, 
 				Plane::Normal{cam.normal.x, cam.normal.y, cam.normal.z}, Plane::Color{ 0,0,0 }, 0);
 
 			camPlane.intersect(point, shadow_ray, imagePlaneDist);
 			trace(point, norm(shadow_ray), objects, shadowDist, tmp);
 
-			//if not shadowed
+			//if not shadowed by an object closer than image plane
 			if (!(shadowDist < imagePlaneDist)) {
 				double scale = dot(nhit, shadow_ray) * hitObject->getLambert();
 				if (scale < 0) {

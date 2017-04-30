@@ -7,7 +7,6 @@ class Object
 public:
 	virtual bool intersect(const Vect &orig, const Vect &dir, double &t) const = 0;
 	virtual Vect getColor() const = 0;
-	virtual Vect getCenter() const = 0;
 	virtual double getLambert() const = 0;
 	virtual Vect getCollisonNorm(const Vect & hPoint) const = 0;
 	virtual ~Object() {} 
@@ -45,7 +44,6 @@ public:
 	
 	Sphere(Center cent, Color col, double lamb, double rad);
 
-	Vect getCenter() const;
 	Vect getColor() const;
 	double getLambert() const;
 	Vect getCollisonNorm(const Vect & hPoint) const;
@@ -71,7 +69,6 @@ public:
 
 	Plane(Center cent, Normal norm, Color col, double lamb);
 
-	Vect getCenter() const;
 	Vect getColor() const;
 	double getLambert() const;
 	Vect getCollisonNorm(const Vect & hPoint) const;

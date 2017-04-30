@@ -26,11 +26,6 @@ Sphere::Sphere(Center cent, Color col, double lamb, double rad)
 	radius = rad;
 }
 
-Vect Sphere::getCenter() const
-{
-	return Vect(center.x, center.y, center.z);
-}
-
 Vect Sphere::getColor() const
 {
 	return Vect(color.r, color.g, color.b);
@@ -43,7 +38,7 @@ double Sphere::getLambert() const
 
 Vect Sphere::getCollisonNorm(const Vect & hPoint) const
 {
-	return norm(hPoint - getCenter());
+	return norm(hPoint - Vect(center.x, center.y, center.z));
 }
 
 bool Sphere::intersect(const Vect & orig, const Vect & dir, double & t) const
@@ -77,11 +72,6 @@ Plane::Plane(Center cent, Normal norm, Color col, double lamb)
 	normal = norm;
 	color = col;
 	lambert = lamb;
-}
-
-Vect Plane::getCenter() const
-{
-	return Vect(center.x, center.y, center.z);
 }
 
 Vect Plane::getColor() const
@@ -121,23 +111,19 @@ Light::Light(Location loc, double inten)
 bool solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1)
 {
 	double discr = b * b - 4 * a * c;
-	if (discr < 0) {
+	if (discr <= 0) {
 		return false;
 	}
-	if (discr == 0) {
-		x0 = x1 = -0.5 * b / a;
+
+	double q;
+	if (b > 0) {
+		q = -0.5 * (b + sqrt(discr));
 	}
 	else {
-		double q;
-		if (b > 0) {
-			q = -0.5 * (b + sqrt(discr));
-		}
-		else {
-			q = -0.5 * (b - sqrt(discr));
-		}
-		x0 = q / a;
-		x1 = c / q;
+		q = -0.5 * (b - sqrt(discr));
 	}
+	x0 = q / a;
+	x1 = c / q;
 
 	return true;
 }

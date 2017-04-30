@@ -12,7 +12,7 @@ class JSONParse {
 public:
 	//take in a file name, read into a QJsonDocument, 
 	//and store values in the scene
-	JSONParse();
+	JSONParse() {};
 	JSONParse(std::string fname);
 
 	//read in all json key/value pairs and store as internal objects

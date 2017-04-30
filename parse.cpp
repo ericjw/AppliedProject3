@@ -17,9 +17,6 @@ JSONParse::JSONParse(std::string fname) {
 	jdoc = QJsonDocument().fromJson(infile.readAll());
 }
 
-JSONParse::JSONParse() {
-
-}
 
 void JSONParse::parse(std::vector<std::unique_ptr<Object>> &objects) {
 	QJsonObject obj = jdoc.object();
