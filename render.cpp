@@ -9,9 +9,8 @@ RayTracer::RayTracer(std::vector<Light> li, Camera ca)
 	cam = ca;
 }
 
-void RayTracer::renderPart(const std::vector<std::unique_ptr<Object>> &objects, const Vect &orig, const int &minY, const int &maxY, std::vector<std::vector<Vect>> &pixelsX) {
+void RayTracer::renderPart(const std::vector<std::unique_ptr<Object>> &objects, const Vect &orig, const int &minY, const int &maxY, std::vector<std::tuple<double, double, Vect>> &pixels) {
 	for (int x = 0; x < cam.size[1]; x++) {
-		std::vector<Vect> pixelsY;
 		for (int y = minY; y < maxY; y++) {
 
 			double i = cam.resolution[1] * (x - (cam.size[1] / 2));
@@ -19,16 +18,15 @@ void RayTracer::renderPart(const std::vector<std::unique_ptr<Object>> &objects, 
 
 			Vect dir = norm(Vect(i, j, 0) - orig);
 			Vect col = castRay(orig, dir, objects);
-			pixelsY.push_back(col);
+			std::lock_guard<std::mutex> lock(mut);
+			pixels.push_back(std::make_tuple(x, y, col));
 		}
-		std::lock_guard<std::mutex> lock(mut);
-		pixelsX.push_back(pixelsY);
 	}
 }
 
 void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, const std::string &fname, const int &numThreads) {
 	QImage img(cam.size[1], cam.size[0], QImage::Format_RGB32);
-	std::vector<std::vector<Vect>> pixelsX;
+	std::vector<std::tuple<double, double, Vect>> pixels;
 
 	Vect orig = Vect(cam.center.x, cam.center.y, cam.center.z) - (Vect(cam.normal.x, cam.normal.y, cam.normal.z) * cam.focus);
 	int maxY = cam.size[0] / numThreads;
@@ -38,7 +36,7 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 	std::vector<std::thread> threads;
 	for (int t = 0; t < numThreads; t++) {
 		//threads.push_back(std::thread(&RayTracer::renderPart, this, &objects, orig, minY, maxY, pixelsX));
-		threads.push_back(std::thread([this, &objects, orig, minY, maxY, &pixelsX]() {renderPart(objects, orig, minY, maxY, pixelsX); }));
+		threads.push_back(std::thread([this, &objects, orig, minY, maxY, &pixels]() {renderPart(objects, orig, minY, maxY, pixels); }));
 		maxY += cam.size[0] / numThreads;
 		minY += cam.size[0] / numThreads;
 	}
@@ -50,39 +48,63 @@ void RayTracer::render(const std::vector<std::unique_ptr<Object>> &objects, cons
 
 	//find max for autoexposure
 	double max = 0;
-	for (auto vx : pixelsX) {
-		for (auto vy : vx) {
+	for (auto ind : pixels) {
+		double r = std::get<2>(ind).x;
+		double g = std::get<2>(ind).y;
+		double b = std::get<2>(ind).z;
 
-			if (vy.x > max) {
-				max = vy.x;
-			}
-			else if (vy.y > max) {
-				max = vy.y;
-			}
-			else if (vy.z > max) {
-				max = vy.z;
-			}
+		if (r > max) {
+			max = r;
+		} 
+		else if (g > max) {
+			max = g;
+		}
+		else if (b > max) {
+			max = b;
 		}
 	}
 
+	////find max for autoexposure
+	//double max = 0;
+	//for (auto vx : pixelsX) {
+	//	for (auto vy : vx) {
+
+	//		if (vy.x > max) {
+	//			max = vy.x;
+	//		}
+	//		else if (vy.y > max) {
+	//			max = vy.y;
+	//		}
+	//		else if (vy.z > max) {
+	//			max = vy.z;
+	//		}
+	//	}
+	//}
+
 	//scale all values by max
-	for (std::vector<Vect> &vx : pixelsX) {
-		for (Vect &vy : vx) {
-			double tmpScale = (255. / max);
-			vy = vy * tmpScale;
-		}
+	double tmpScale = (255. / max);
+	for (std::tuple<double, double, Vect> &pix : pixels) {
+		Vect &currCol = std::get<2>(pix);
+		currCol = currCol * tmpScale;
 	}
 
 	//set each pixel in image
-	int x = 0;
-	int y = 0;
-	for (auto vx : pixelsX) {
-		for (auto vy : vx) {
-			img.setPixel(x, y, QColor((int)vy.x, (int)vy.y, (int)vy.z).rgb());
-			y++;
-		}
-		x++;
-		y = 0;
+	//int x = 0;
+	//int y = 0;
+	//for (auto vx : pixelsX) {
+	//	for (auto vy : vx) {
+	//		img.setPixel(x, y, QColor((int)vy.x, (int)vy.y, (int)vy.z).rgb());
+	//		y++;
+	//	}
+	//	x++;
+	//	if (x >= 1024)
+	//		break;
+	//	y = 0;
+	//}
+
+	for (auto p : pixels) {
+		Vect col = std::get<2>(p);
+		img.setPixel(std::get<0>(p), std::get<1>(p), QColor(col.x, col.y, col.z).rgb());
 	}
 
 	img.save(fname.c_str());

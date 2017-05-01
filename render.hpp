@@ -17,7 +17,7 @@ public:
 	Vect castRay(const Vect & orig, const Vect & dir, const std::vector<std::unique_ptr<Object>>& objects);
 	void render(const std::vector<std::unique_ptr<Object>>& objects, const std::string &fname, const int &numThreads);
 	bool trace(const Vect &orig, const Vect &dir, const std::vector<std::unique_ptr<Object>> &objects, double &distNear, const Object *&hitObject);	
-	void renderPart(const std::vector<std::unique_ptr<Object>>& objects, const Vect & orig, const int & minY, const int & maxY, std::vector<std::vector<Vect>>& pixelsX);
+	void renderPart(const std::vector<std::unique_ptr<Object>>& objects, const Vect & orig, const int & minY, const int & maxY, std::vector<std::tuple<double, double, Vect>>& pixels);
 
 private:
 	std::vector<Light> lights;
