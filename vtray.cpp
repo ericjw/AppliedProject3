@@ -39,8 +39,6 @@ int main(int argc, char * argv[]) {
 		//number of threads
 		int threads = strtol(argv[2], NULL, 10);
 
-		std::cout << "# threads->" << threads << std::endl;
-
 		std::vector<std::unique_ptr<Object>> objects;
 		JSONParse x;
 		//open file
